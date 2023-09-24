@@ -1,0 +1,54 @@
+{
+	"data": [
+		{
+			"id": "1000",
+			"code": "f230fh0g3",
+			"name": "Iphone-14",
+			"description": "Product Description",
+			"image": "test.png",
+			"price": 65,
+			"category": "Accessories",
+			"quantity": 24,
+			"inventoryStatus": "INSTOCK",
+            "rating": 5,
+            "orders": [
+                {
+                    "id": "1000",
+                    "productCode": "f230fh0g3",
+                    "date": "2020-09-13",
+                    "amount": 65,
+                    "quantity": 1,
+                    "customer": "Sukhe",
+                    "status": "PENDING"
+                },
+                {
+                    "id": "1001",
+                    "productCode": "f230fh0g3",
+                    "date": "2020-05-14",
+                    "amount": 130,
+                    "quantity": 2,
+                    "customer": "Sukhe",
+                    "status": "DELIVERED"
+                },
+                {
+                    "id": "1002",
+                    "productCode": "f230fh0g3",
+                    "date": "2019-01-04",
+                    "amount": 65,
+                    "quantity": 1,
+                    "customer": "Sukhe",
+                    "status": "RETURNED"
+                },
+                {
+                    "id": "1003",
+                    "productCode": "f230fh0g3",
+                    "date": "2020-09-13",
+                    "amount": 195,
+                    "quantity": 3,
+                    "customer": "Sukhe",
+                    "status": "CANCELLED"
+                }
+            ]
+		}
+	]
+}

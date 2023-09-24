@@ -1,0 +1,12 @@
+
+{
+    "data": [
+        {"id": "1000","code": "f230fh0g3","name": "iphone-14","description": "Product Description","image": "test.png","price": 65,"category": "Employed","quantity": 24,"inventoryStatus": "INSTOCK","rating": 5},
+        {"id": "1000","code": "f230fh0g3","name": "iphone-14","description": "Product Description","image": "test.png","price": 65,"category": "Employed","quantity": 24,"inventoryStatus": "LOWSTOCK","rating": 5},
+        {"id": "1000","code": "f230fh0g3","name": "iphone-14","description": "Product Description","image": "test.png","price": 65,"category": "Employed","quantity": 24,"inventoryStatus": "OUTOFSTOCK","rating": 5},
+        {"id": "1000","code": "f230fh0g3","name": "iphone-14","description": "Product Description","image": "test.png","price": 65,"category": "Employed","quantity": 24,"inventoryStatus": "INSTOCK","rating": 5},
+        {"id": "1000","code": "f230fh0g3","name": "iphone-14","description": "Product Description","image": "test.png","price": 65,"category": "Employed","quantity": 24,"inventoryStatus": "INSTOCK","rating": 5},
+        {"id": "1000","code": "f230fh0g3","name": "iphone-14","description": "Product Description","image": "test.png","price": 65,"category": "Employed","quantity": 24,"inventoryStatus": "INSTOCK","rating": 5}
+    ]
+}
+    
