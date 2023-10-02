@@ -378,6 +378,6 @@ const initFilters = () => {
 
 .field {
     flex: 1;
-    margin-right: 10px; /* Add spacing between the fields */
+    margin-right: 10px; 
 }
 </style>
