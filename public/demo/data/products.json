@@ -1,12 +1,7 @@
 
 {
     "data": [
-        {"id": "1000","code": "f230fh0g3","name": "iphone-14","description": "Product Description","image": "test.png","price": 65,"category": "Employed","quantity": 24,"inventoryStatus": "INSTOCK","rating": 5},
-        {"id": "1000","code": "f230fh0g3","name": "iphone-14","description": "Product Description","image": "test.png","price": 65,"category": "Employed","quantity": 24,"inventoryStatus": "LOWSTOCK","rating": 5},
-        {"id": "1000","code": "f230fh0g3","name": "iphone-14","description": "Product Description","image": "test.png","price": 65,"category": "Employed","quantity": 24,"inventoryStatus": "OUTOFSTOCK","rating": 5},
-        {"id": "1000","code": "f230fh0g3","name": "iphone-14","description": "Product Description","image": "test.png","price": 65,"category": "Employed","quantity": 24,"inventoryStatus": "INSTOCK","rating": 5},
-        {"id": "1000","code": "f230fh0g3","name": "iphone-14","description": "Product Description","image": "test.png","price": 65,"category": "Employed","quantity": 24,"inventoryStatus": "INSTOCK","rating": 5},
-        {"id": "1000","code": "f230fh0g3","name": "iphone-14","description": "Product Description","image": "test.png","price": 65,"category": "Employed","quantity": 24,"inventoryStatus": "INSTOCK","rating": 5}
+        {"id": "1000","first_name": "Sukhe", "last_name":"A" ,"email": "ab.sukhee@gmail.com","registration": "UO02241614","dateOfBirth": "09/06/2023","loan_amount": 1000,"em_status": "Employed","credit_score": 24,"description": "n;an;an;a"}
     ]
 }
     

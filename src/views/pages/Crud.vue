@@ -4,6 +4,7 @@ import { FilterMatchMode } from 'primevue/api';
 import { ref, onMounted, onBeforeMount } from 'vue';
 import ProductService from '@/service/ProductService';
 import { useToast } from 'primevue/usetoast';
+const calendarValue = ref(null);
 
 const toast = useToast();
 
@@ -11,15 +12,27 @@ const products = ref(null);
 const productDialog = ref(false);
 const deleteProductDialog = ref(false);
 const deleteProductsDialog = ref(false);
-const product = ref({});
+const product = ref({
+    first_name: '',
+    last_name: '',
+    email: '',
+    registration: '',
+    dateOfBirth: null,
+    loan_amount: '',
+    category: '', 
+    inventoryStatus: null,
+    credit_score: '',
+    description: ''
+});
 const selectedProducts = ref(null);
 const dt = ref(null);
 const filters = ref({});
 const submitted = ref(false);
 const statuses = ref([
-    { label: 'INSTOCK', value: 'instock' },
-    { label: 'LOWSTOCK', value: 'lowstock' },
-    { label: 'OUTOFSTOCK', value: 'outofstock' }
+    { label: '1 month', value: 'one_month' },
+    { label: '6 month', value: 'six_month' },
+    { label: '12 month', value: 'twelwe_month' },
+    { label: '2 year', value: 'two_year' }
 ]);
 
 const productService = new ProductService();
@@ -30,9 +43,6 @@ onBeforeMount(() => {
 onMounted(() => {
     productService.getProducts().then((data) => (products.value = data));
 });
-const formatCurrency = (value) => {
-    return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
-};
 
 const openNew = () => {
     product.value = {};
@@ -47,7 +57,7 @@ const hideDialog = () => {
 
 const saveProduct = () => {
     submitted.value = true;
-    if (product.value.name && product.value.name.trim() && product.value.price) {
+    if (product.value.first_name && product.value.first_name && product.value.email && product.value.registration && product.value.dateOfBirth && product.value.loan_amount && product.value.credit_score) {
         if (product.value.id) {
             product.value.inventoryStatus = product.value.inventoryStatus.value ? product.value.inventoryStatus.value : product.value.inventoryStatus;
             products.value[findIndexById(product.value.id)] = product.value;
@@ -56,7 +66,7 @@ const saveProduct = () => {
             product.value.id = createId();
             product.value.code = createId();
             product.value.image = 'product-placeholder.svg';
-            product.value.inventoryStatus = product.value.inventoryStatus ? product.value.inventoryStatus.value : 'INSTOCK';
+            product.value.inventoryStatus = product.value.inventoryStatus ? product.value.inventoryStatus.value : '1 month';
             products.value.push(product.value);
             toast.add({ severity: 'success', summary: 'Successful', detail: 'Product Created', life: 3000 });
         }
@@ -96,7 +106,7 @@ const findIndexById = (id) => {
 
 const createId = () => {
     let id = '';
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const chars = '0123456789';
     for (let i = 0; i < 5; i++) {
         id += chars.charAt(Math.floor(Math.random() * chars.length));
     }
@@ -170,27 +180,26 @@ const initFilters = () => {
                     <Column field="code" header="Code" :sortable="true" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
                             <span class="p-column-title">Code</span>
-                            {{ slotProps.data.code }}
+                            {{ slotProps.data.id }}
                         </template>
                     </Column>
-                    <Column field="f_name" header="First Name" :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                    <Column field="first_name" header="First Name" :sortable="true" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
-                            <span class="p-column-title">f_name</span>
-                            {{ slotProps.data.name }}
+                            <span class="p-column-title">first_name</span>
+                            {{ slotProps.data.first_name }}
                         </template>
                     </Column>
-                    <Column field="l_name" header="Last Name" :sortable="true" headerStyle="width:14%; min-width:10rem;">
+                    <Column field="last_name" header="Last Name" :sortable="true" headerStyle="width:14%; min-width:10rem;">
                         <template #body="slotProps">
-                            <span class="p-column-title">l_name</span>
-                            {{ slotProps.data.name }}
+                            <span class="p-column-title">last_name</span>
+                            {{ slotProps.data.last_name }}
                         </template>
                     </Column>
 
-
-                    <Column field="price" header="Price" :sortable="true" headerStyle="width:14%; min-width:8rem;">
+                    <Column field="leasing_amount" header="Amount" :sortable="true" headerStyle="width:14%; min-width:8rem;">
                         <template #body="slotProps">
-                            <span class="p-column-title">Price</span>
-                            {{ formatCurrency(slotProps.data.price) }}
+                            <span class="p-column-title">amount</span>
+                            {{ slotProps.data.loan_amount }}
                         </template>
                     </Column>
                     <Column field="em_status" header="Employment" :sortable="true" headerStyle="width:14%; min-width:10rem;">
@@ -219,33 +228,49 @@ const initFilters = () => {
                     </Column>
                 </DataTable>
 
-                <Dialog v-model:visible="productDialog" :style="{ width: '450px' }" header="Product Details" :modal="true" class="p-fluid">
+                <Dialog v-model:visible="productDialog" :style="{ width: '600px' }" header="Product Details" :modal="true" class="p-fluid">
                     <img :src="'demo/images/product/' + product.image" :alt="product.image" v-if="product.image" width="150" class="mt-0 mx-auto mb-5 block shadow-2" />
-                    <div class="field">
-                        <label for="name">Name</label>
-                        <InputText id="name" v-model.trim="product.name" required="true" autofocus :class="{ 'p-invalid': submitted && !product.name }" />
-                        <small class="p-invalid" v-if="submitted && !product.name">Name is required.</small>
-                    </div>
-                    <div class="field">
-                        <label for="description">Description</label>
-                        <Textarea id="description" v-model="product.description" required="true" rows="3" cols="20" />
+
+                    <!-- input name -->
+                    <div class="container">
+                        <div class="field">
+                            <label for="first_name">First Name</label>
+                            <InputText id="first_name" v-model.trim="product.first_name" required="true" autofocus :class="{ 'p-invalid': submitted && !product.first_name }" />
+                            <small class="p-invalid" v-if="submitted && !product.first_name">first name is required.</small>
+                        </div>
+
+                        <div class="field">
+                            <label for="last_name">Last Name</label>
+                            <InputText id="last_name" v-model.trim="product.last_name" required="true" autofocus :class="{ 'p-invalid': submitted && !product.last_name }" />
+                            <small class="p-invalid" v-if="submitted && !product.last_name">last name is required.</small>
+                        </div>
                     </div>
 
-                    <div class="field">
-                        <label for="inventoryStatus" class="mb-3">Inventory Status</label>
-                        <Dropdown id="inventoryStatus" v-model="product.inventoryStatus" :options="statuses" optionLabel="label" placeholder="Select a Status">
-                            <template #value="slotProps">
-                                <div v-if="slotProps.value && slotProps.value.value">
-                                    <span :class="'product-badge status-' + slotProps.value.value">{{ slotProps.value.label }}</span>
-                                </div>
-                                <div v-else-if="slotProps.value && !slotProps.value.value">
-                                    <span :class="'product-badge status-' + slotProps.value.toLowerCase()">{{ slotProps.value }}</span>
-                                </div>
-                                <span v-else>
-                                    {{ slotProps.placeholder }}
-                                </span>
-                            </template>
-                        </Dropdown>
+                    <!-- email and registration number -->
+                    <div class="container">
+                        <div class="field">
+                            <label for="email">Email</label>
+                            <InputText id="email" v-model.trim="product.email" required="true" autofocus :class="{ 'p-invalid': submitted && !product.email }" />
+                            <small class="p-invalid" v-if="submitted && !product.email">email is required.</small>
+                        </div>
+
+                        <div class="field">
+                            <label for="registration">Registration</label>
+                            <InputText id="registration" v-model.trim="product.registration" required="true" autofocus :class="{ 'p-invalid': submitted && !product.registration }" />
+                            <small class="p-invalid" v-if="submitted && !product.registration">Registration name is required.</small>
+                        </div>
+                    </div>
+
+                    <div class="container">
+                        <div class="field">
+                            <label for="dateOfBirth">Date of Birth</label>
+                            <Calendar :showIcon="true" :showButtonBar="true" v-model="calendarValue"></Calendar>
+                        </div>
+                        <div class="field">
+                            <label for="loan_amount">Loan amount</label>
+                            <InputText id="loan_amount" v-model.trim="product.loan_amount" required="true" autofocus :class="{ 'p-invalid': submitted && !product.loan_amount }" />
+                            <small class="p-invalid" v-if="submitted && !product.loan_amount">loan_amount name is required.</small>
+                        </div>
                     </div>
 
                     <div class="field">
@@ -270,7 +295,35 @@ const initFilters = () => {
                         </div>
                     </div>
 
-                    <div class="formgrid grid">
+                    <div class="container">
+                        <div class="field">
+                            <label for="inventoryStatus">Status</label>
+                            <Dropdown id="inventoryStatus" v-model="product.inventoryStatus" :options="statuses" optionLabel="label" placeholder="Select a Status">
+                                <template #value="slotProps">
+                                    <div v-if="slotProps.value && slotProps.value.value">
+                                        <span :class="'product-badge status-' + slotProps.value.value">{{ slotProps.value.label }}</span>
+                                    </div>
+                                    <div v-else-if="slotProps.value && !slotProps.value.value">
+                                        <span :class="'product-badge status-' + slotProps.value.toLowerCase()">{{ slotProps.value }}</span>
+                                    </div>
+                                    <span v-else>
+                                        {{ slotProps.placeholder }}
+                                    </span>
+                                </template>
+                            </Dropdown>
+                        </div>
+                        <div class="field">
+                            <label for="credit_score">Credit Score</label>
+                            <InputText id="credit_score" v-model.trim="product.credit_score" required="true" autofocus :class="{ 'p-invalid': submitted && !product.credit_score }" />
+                            <small class="p-invalid" v-if="submitted && !product.credit_score">credit_score name is required.</small>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label for="description">Description</label>
+                        <Textarea id="description" v-model="product.description" required="true" rows="3" cols="20" />
+                    </div>
+                    <!-- <div class="formgrid grid">
                         <div class="field col">
                             <label for="price">Price</label>
                             <InputNumber id="price" v-model="product.price" mode="currency" currency="USD" locale="en-US" :class="{ 'p-invalid': submitted && !product.price }" :required="true" />
@@ -280,7 +333,8 @@ const initFilters = () => {
                             <label for="quantity">Quantity</label>
                             <InputNumber id="quantity" v-model="product.quantity" integeronly />
                         </div>
-                    </div>
+                    </div> -->
+
                     <template #footer>
                         <Button label="Cancel" icon="pi pi-times" class="p-button-text" @click="hideDialog" />
                         <Button label="Save" icon="pi pi-check" class="p-button-text" @click="saveProduct" />
@@ -291,7 +345,7 @@ const initFilters = () => {
                     <div class="flex align-items-center justify-content-center">
                         <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
                         <span v-if="product"
-                            >Are you sure you want to delete <b>{{ product.name }}</b
+                            >Are you sure you want to delete <b>{{ product.first_name }}</b
                             >?</span
                         >
                     </div>
@@ -316,4 +370,14 @@ const initFilters = () => {
     </div>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.field {
+    flex: 1;
+    margin-right: 10px; /* Add spacing between the fields */
+}
+</style>
